@@ -4,19 +4,23 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
+    @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var yesButton: UIButton!
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
 
-    @IBAction private func yesButtonCkicked(_ sender: UIButton) {
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        toggleButtons()
     }
 
-    @IBAction private func noButtonCkicked(_ sender: UIButton) {
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        toggleButtons()
     }
 
     override func viewDidLoad() {
@@ -93,6 +97,8 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+
+        imageView.layer.cornerRadius = 20
     }
 
     private func show(quiz result: QuizResultsViewModel) {
@@ -126,7 +132,7 @@ final class MovieQuizViewController: UIViewController {
 
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
-                correctAnswers += 1
+            correctAnswers += 1
             }
 
         imageView.layer.masksToBounds = true
@@ -135,7 +141,8 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 6
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-               self.showNextQuestionOrResults()
+            self.showNextQuestionOrResults()
+            self.toggleButtons()
            }
     }
 
@@ -155,6 +162,11 @@ final class MovieQuizViewController: UIViewController {
 
             show(quiz: viewModel)
         }
+    }
+    // включение выключение кнопок
+    private func toggleButtons() {
+        noButton.isEnabled.toggle()
+        yesButton.isEnabled.toggle()
     }
 }
 
