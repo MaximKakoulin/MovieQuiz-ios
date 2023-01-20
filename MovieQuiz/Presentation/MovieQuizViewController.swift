@@ -13,14 +13,14 @@ final class MovieQuizViewController: UIViewController {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtons()
+        toggleButtonsOff()
     }
 
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtons()
+        toggleButtonsOff()
     }
 
     override func viewDidLoad() {
@@ -141,7 +141,7 @@ final class MovieQuizViewController: UIViewController {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResults()
-            self.toggleButtons()
+            self.toggleButtonsOn()
            }
     }
 
@@ -163,7 +163,12 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     // включение выключение кнопок
-    private func toggleButtons() {
+    private func toggleButtonsOff() {
+        noButton.isEnabled.toggle()
+        yesButton.isEnabled.toggle()
+    }
+
+    private func toggleButtonsOn() {
         noButton.isEnabled.toggle()
         yesButton.isEnabled.toggle()
     }
