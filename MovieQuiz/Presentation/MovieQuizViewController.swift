@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
@@ -9,7 +9,7 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     private let questionsAmount: Int = 10
-    private let questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
 
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
@@ -30,13 +30,20 @@ final class MovieQuizViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let firstQuestion = questionFactory.requestNextQuestion() {
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
-            show(quiz: viewModel)
-        }
+        questionFactory = QuestionFactory(delegate: self)
+        questionFactory?.requestNextQuestion()
     }
 
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
+        }
+    }
 
     private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
@@ -44,31 +51,6 @@ final class MovieQuizViewController: UIViewController {
         counterLabel.text = step.questionNumber
 
         imageView.layer.cornerRadius = 20
-    }
-
-    private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-
-            // заново показываем первый вопрос
-            if let firstQuestion = self.questionFactory.requestNextQuestion() {
-                self.currentQuestion = firstQuestion
-                let viewModel = self.convert(model: firstQuestion)
-
-                self.show(quiz: viewModel)
-            }
-        }
-
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
     }
 
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -97,25 +79,32 @@ final class MovieQuizViewController: UIViewController {
 
     private func showNextQuestionOrResults() {
         imageView.layer.borderColor = UIColor.clear.cgColor
+
         if currentQuestionIndex == questionsAmount - 1 {
             let text = correctAnswers == questionsAmount ? "Поздравляем, Вы ответили на 10 из 10!" :
             "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
 
-            let viewModel = QuizResultsViewModel(
+            let alertPresenter = AlertPresenter()
+            let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
-                text: text,
+                message: text,
                 buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel)
-        } else {
-            currentQuestionIndex += 1
-            if let nextQuestion = questionFactory.requestNextQuestion() {
-                currentQuestion = nextQuestion
-                let viewModel = convert(model: nextQuestion)
+            { [weak self] _ in
+                guard let self = self else { return }
 
-                show(quiz: viewModel)
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                self.questionFactory?.requestNextQuestion()
+            }
+
+            alertPresenter.showAlert(with: alertModel, in: self )
+
+        } else {
+                currentQuestionIndex += 1
+                questionFactory?.requestNextQuestion()
             }
         }
-    }
+
 
     // включение выключение кнопок
         private func toggleButtonsOff() {

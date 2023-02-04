@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		94431847298E67F600C94D44 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94431846298E67F600C94D44 /* AlertModel.swift */; };
+		94431849298E696900C94D44 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94431848298E696900C94D44 /* AlertPresenter.swift */; };
 		94908946298A5629000D89DE /* QuestionsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94908945298A5629000D89DE /* QuestionsFactory.swift */; };
 		94908949298A5AB6000D89DE /* QuizStepViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94908948298A5AB6000D89DE /* QuizStepViewModel.swift */; };
 		9490894B298A5AD9000D89DE /* QuizResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490894A298A5AD9000D89DE /* QuizResultViewModel.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		94431846298E67F600C94D44 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
+		94431848298E696900C94D44 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		94908945298A5629000D89DE /* QuestionsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsFactory.swift; sourceTree = "<group>"; };
 		94908948298A5AB6000D89DE /* QuizStepViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizStepViewModel.swift; sourceTree = "<group>"; };
 		9490894A298A5AD9000D89DE /* QuizResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizResultViewModel.swift; sourceTree = "<group>"; };
@@ -64,6 +68,7 @@
 			children = (
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
 				94C17881295F324C00224A89 /* Main.storyboard */,
+				94431848298E696900C94D44 /* AlertPresenter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -96,6 +101,7 @@
 				94908948298A5AB6000D89DE /* QuizStepViewModel.swift */,
 				9490894A298A5AD9000D89DE /* QuizResultViewModel.swift */,
 				9490894C298A5AF5000D89DE /* QuizQuestion.swift */,
+				94431846298E67F600C94D44 /* AlertModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -237,6 +243,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
+				94431849298E696900C94D44 /* AlertPresenter.swift in Sources */,
+				94431847298E67F600C94D44 /* AlertModel.swift in Sources */,
 				AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */,
 				9490894F298AA3C1000D89DE /* QuestionFactoryProtocol.swift in Sources */,
 				94908951298AC824000D89DE /* QuestionFactoryDelegate.swift in Sources */,
