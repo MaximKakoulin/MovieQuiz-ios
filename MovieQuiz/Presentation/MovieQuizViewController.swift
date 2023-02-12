@@ -99,12 +99,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let totalAccuracy = statisticService?.totalAccuracy else { return }
             guard let bestGame = statisticService?.bestGame else { return }
 
-            let text = """
-Ваш результат: \(correctAnswers)/\(questionsAmount)
-            Количество сыгранных квизов: \(gamesCount)
-            Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))
-            Средняя точность: \(String(format: "%.2f", totalAccuracy))%
-"""
+            let text =
+            "Ваш результат: \(correctAnswers)/\(questionsAmount)\n Количество сыгранных квизов: \(gamesCount)\n Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))\n Средняя точность: \(String(format: "%.2f", totalAccuracy))%"
+
 
             let alertPresenter = AlertPresenter()
             let alertModel = AlertModel(
