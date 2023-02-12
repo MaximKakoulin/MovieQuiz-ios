@@ -20,7 +20,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtonsOff()
+        toggleButtons()
     }
 
     @IBAction private func noButtonClicked(_ sender: UIButton) {
@@ -28,14 +28,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtonsOff()
+        toggleButtons()
     }
 
-    private func toggleButtonsOff() {
-       noButton.isEnabled.toggle()
-       yesButton.isEnabled.toggle()
-   }
-    private func toggleButtonsOn() {
+    private func toggleButtons() {
        noButton.isEnabled.toggle()
        yesButton.isEnabled.toggle()
    }
@@ -86,7 +82,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
 
             self.showNextQuestionOrResults()
-            self.toggleButtonsOn()
+            self.toggleButtons()
         }
     }
 

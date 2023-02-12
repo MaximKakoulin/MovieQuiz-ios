@@ -65,18 +65,17 @@ final class StatisticServiceImplementation:StatisticService {
     }
 
     func store(correct count: Int, total amount: Int) {
+        let gameRecord = GameRecord(correct: count, total: amount, date: Date())
         gamesCount += 1
         userDefaults.set(self.total + amount, forKey: Keys.total.rawValue)
         userDefaults.set(self.correct + count, forKey: Keys.correct.rawValue)
-        if bestGame < GameRecord(correct: count, total: amount, date: date) {
-            self.bestGame = GameRecord(correct: count, total: amount, date: date)
+
+        if bestGame < gameRecord {
+            self.bestGame = gameRecord
         } else {
             self.bestGame = bestGame
         }
     }
 }
-
-
-
 
 
