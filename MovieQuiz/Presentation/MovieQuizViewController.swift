@@ -1,16 +1,19 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var noButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
+
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    private var statisticService: StatisticService?
 
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else { return }
@@ -28,10 +31,20 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         toggleButtonsOff()
     }
 
+    private func toggleButtonsOff() {
+       noButton.isEnabled.toggle()
+       yesButton.isEnabled.toggle()
+   }
+    private func toggleButtonsOn() {
+       noButton.isEnabled.toggle()
+       yesButton.isEnabled.toggle()
+   }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
+        statisticService = StatisticServiceImplementation()
     }
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -81,8 +94,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderColor = UIColor.clear.cgColor
 
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ? "Поздравляем, Вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
+            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+            guard let gamesCount = statisticService?.gamesCount else { return }
+            guard let totalAccuracy = statisticService?.totalAccuracy else { return }
+            guard let bestGame = statisticService?.bestGame else { return }
+
+            let text = """
+Ваш результат: \(correctAnswers)/\(questionsAmount)
+            Количество сыгранных квизов: \(gamesCount)
+            Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))
+            Средняя точность: \(String(format: "%.2f", totalAccuracy))%
+"""
 
             let alertPresenter = AlertPresenter()
             let alertModel = AlertModel(
@@ -104,19 +126,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 questionFactory?.requestNextQuestion()
             }
         }
-
-
-    // включение выключение кнопок
-        private func toggleButtonsOff() {
-            noButton.isEnabled.toggle()
-            yesButton.isEnabled.toggle()
-        }
-
-        private func toggleButtonsOn() {
-            noButton.isEnabled.toggle()
-            yesButton.isEnabled.toggle()
-        }
     }
+
 
 
 
