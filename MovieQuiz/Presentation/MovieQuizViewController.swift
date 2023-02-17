@@ -43,7 +43,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription) // Сообщение - это описание ошибки
+        showNetworkError(message: error.localizedDescription) // message - это описание ошибки
     }
     
     private func showNetworkError(message: String) {
@@ -73,6 +73,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        imageView.layer.cornerRadius = 20
 
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()

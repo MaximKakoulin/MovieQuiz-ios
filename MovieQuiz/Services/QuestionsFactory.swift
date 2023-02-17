@@ -31,7 +31,7 @@ class QuestionFactory: QuestionFactoryProtocol {
 
             var imageData = Data()
 
-           do {
+            do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
                 print("Failed to load image")
@@ -43,8 +43,8 @@ class QuestionFactory: QuestionFactoryProtocol {
             let correctAnswer = rating > 7
 
             let question = QuizQuestion(image: imageData,
-                                         text: text,
-                                         correctAnswer: correctAnswer)
+                                        text: text,
+                                        correctAnswer: correctAnswer)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -57,6 +57,7 @@ class QuestionFactory: QuestionFactoryProtocol {
         self.moviesLoader = moviesLoader
         self.delegate = delegate
     }
+}
 
     /*
     private let questions: [QuizQuestion] = [
@@ -102,7 +103,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             correctAnswer: false)
     ]
      */
-}
+
 
 
 
