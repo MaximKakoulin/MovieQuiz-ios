@@ -104,11 +104,16 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="t9F-2t-hFp">
+                                <rect key="frame" x="177.66666666666666" y="396" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YPblack"/>
                         <constraints>
                             <constraint firstItem="jIy-Pl-2HT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Vci-6A-erM"/>
+                            <constraint firstItem="t9F-2t-hFp" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aSt-e3-4Fd"/>
+                            <constraint firstItem="t9F-2t-hFp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ohR-bq-Kuw"/>
                             <constraint firstItem="jIy-Pl-2HT" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="xCc-oX-tM2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jIy-Pl-2HT" secondAttribute="trailing" constant="20" id="zbK-qm-LD0"/>
                         </constraints>
@@ -119,6 +124,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="t9F-2t-hFp" id="Mbi-6p-OlE"/>
                         <outlet property="counterLabel" destination="MGm-KI-ZDa" id="sCq-i7-GXs"/>
                         <outlet property="imageView" destination="G9C-gp-GNm" id="Jss-eN-xS4"/>
                         <outlet property="noButton" destination="svg-HH-358" id="nsI-RL-G69"/>
@@ -133,7 +139,7 @@
     </scenes>
     <resources>
         <namedColor name="YPblack">
-            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="YPwhite">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
