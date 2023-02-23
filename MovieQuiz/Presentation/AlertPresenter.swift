@@ -1,9 +1,8 @@
-import Foundation
 import UIKit
 
 
-class AlertPresenter {
-     func showAlert (with model: AlertModel, in viewController: UIViewController) {
+final class AlertPresenter {
+    func showAlert (with model: AlertModel, in viewController: UIViewController) {
         let alert = UIAlertController(
             title: model.title,
             message: model.message,
@@ -11,8 +10,8 @@ class AlertPresenter {
 
         let action = UIAlertAction(title: model.buttonText, style: .default, handler: model.completion)
 
-            alert.addAction(action)
-            viewController.present(alert, animated: true, completion: nil)
-        }
+        alert.addAction(action)
+        viewController.present(alert, animated: true, completion: nil)
     }
+}
 

@@ -1,4 +1,3 @@
-import Foundation
 import UIKit
 
 // для создания алерта в конце квиза
