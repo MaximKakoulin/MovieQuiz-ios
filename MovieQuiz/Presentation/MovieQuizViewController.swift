@@ -2,11 +2,11 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
-    @IBOutlet var imageView: UIImageView!
+    @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet var noButton: UIButton!
-    @IBOutlet var yesButton: UIButton!
+    @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
@@ -14,12 +14,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
         presenter.yesButtonClicked()
-        presenter.toggleButtons()
+        toggleButtons()
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         presenter.noButtonClicked()
-        presenter.toggleButtons()
+        toggleButtons()
+    }
+
+    private func toggleButtons() {
+        noButton.isEnabled.toggle()
+        yesButton.isEnabled.toggle()
     }
     
     private func showLoadingIndicator() {
@@ -89,6 +94,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        imageView.layer.borderColor = UIColor.clear.cgColor
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
@@ -96,7 +102,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.presenter.correctAnswers = self.presenter.correctAnswers
             self.presenter.questionFactory = self.presenter.questionFactory
             self.presenter.showNextQuestionOrResults()
-            self.presenter.toggleButtons()
+            self.toggleButtons()
         }
     }
 }
