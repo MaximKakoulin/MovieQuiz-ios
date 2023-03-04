@@ -3,7 +3,9 @@ import UIKit
 
 
 final class MovieQuizPresenter {
-    
+    var noButton: UIButton!
+    var yesButton: UIButton!
+    var imageView: UIImageView!
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
     weak var questionFactory: QuestionFactory?
@@ -46,6 +48,11 @@ final class MovieQuizPresenter {
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
 
+    func toggleButtons() {
+        noButton.isEnabled.toggle()
+        yesButton.isEnabled.toggle()
+    }
+
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else { return }
 
@@ -57,6 +64,7 @@ final class MovieQuizPresenter {
     }
 
      func showNextQuestionOrResults() {
+        imageView.layer.borderColor = UIColor.clear.cgColor
         // объединить guard
         if self.isLastQuestion() {
             statisticService?.store(correct: correctAnswers, total: self.questionsAmount)
