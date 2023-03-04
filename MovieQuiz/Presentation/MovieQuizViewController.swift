@@ -2,33 +2,24 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
-    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet private var noButton: UIButton!
-    @IBOutlet private var yesButton: UIButton!
+    @IBOutlet var noButton: UIButton!
+    @IBOutlet var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
-    
-    private var correctAnswers: Int = 0
-    private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion?
+    var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticService?
     private let presenter = MovieQuizPresenter()
 
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else { return }
-        
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtons()
+        presenter.yesButtonClicked()
+        presenter.toggleButtons()
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else { return }
-        
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-        toggleButtons()
+        presenter.noButtonClicked()
+        presenter.toggleButtons()
     }
     
     private func showLoadingIndicator() {
@@ -57,21 +48,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
             
             self.presenter.resetQuestionIndex()
-            self.correctAnswers = 0
+            self.presenter.correctAnswers = 0
             self.questionFactory?.requestNextQuestion()
         }
         
         alertPresenter.showAlert(with: alertModel, in: self )
     }
 
-
-    private func toggleButtons() {
-        noButton.isEnabled.toggle()
-        yesButton.isEnabled.toggle()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        presenter.viewController = self
 
         imageView.layer.cornerRadius = 20
 
@@ -83,17 +70,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        currentQuestion = question
-        let viewModel = presenter.convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
+        presenter.didReceiveNextQuestion(question: question)
     }
 
-    private func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
@@ -101,9 +81,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.cornerRadius = 20
     }
 
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
-            correctAnswers += 1
+            presenter.correctAnswers += 1
         }
 
         imageView.layer.masksToBounds = true
@@ -113,42 +93,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
 
-            self.showNextQuestionOrResults()
-            self.toggleButtons()
-        }
-    }
-
-    private func showNextQuestionOrResults() {
-        imageView.layer.borderColor = UIColor.clear.cgColor
-        // объединить guard
-        if presenter.isLastQuestion() {
-            statisticService?.store(correct: correctAnswers, total: presenter.questionsAmount)
-            guard let gamesCount = statisticService?.gamesCount else { return }
-            guard let totalAccuracy = statisticService?.totalAccuracy else { return }
-            guard let bestGame = statisticService?.bestGame else { return }
-
-            let text =
-            "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)\n Количество сыгранных квизов: \(gamesCount)\n Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))\n Средняя точность: \(String(format: "%.2f", totalAccuracy))%"
-
-
-            let alertPresenter = AlertPresenter()
-            let alertModel = AlertModel(
-                title: "Этот раунд окончен!",
-                message: text,
-                buttonText: "Сыграть ещё раз")
-            { [weak self] _ in
-                guard let self = self else { return }
-
-                self.presenter.resetQuestionIndex()
-                self.correctAnswers = 0
-                self.questionFactory?.requestNextQuestion()
-            }
-
-            alertPresenter.showAlert(with: alertModel, in: self )
-
-        } else {
-            presenter.switchToNextQuestion()
-            questionFactory?.requestNextQuestion()
+            self.presenter.correctAnswers = self.presenter.correctAnswers
+            self.presenter.questionFactory = self.presenter.questionFactory
+            self.presenter.showNextQuestionOrResults()
+            self.presenter.toggleButtons()
         }
     }
 }
