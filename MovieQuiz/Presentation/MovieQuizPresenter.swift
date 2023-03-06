@@ -72,7 +72,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 
     func noButtonClicked() {
         didAnswer(isYes: false)
-
     }
 
     func didAnswer(isYes: Bool) {
