@@ -68,10 +68,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 
     func yesButtonClicked() {
         didAnswer(isYes: true)
+        self.viewController?.updateButtonState(false)
     }
 
     func noButtonClicked() {
         didAnswer(isYes: false)
+        self.viewController?.updateButtonState(false)
     }
 
     func didAnswer(isYes: Bool) {
@@ -89,6 +91,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.proceedToNextQuestionOrResults()
+            self.viewController?.updateButtonState(true)
         }
     }
 
@@ -132,6 +135,18 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 
         return resultMessage
     }
+}
+
+protocol MovieQuizViewControllerProtocol: AnyObject {
+    func show(quiz step: QuizStepViewModel)
+    func show(quiz result: QuizResultsViewModel)
+
+    func highlightImageBorder(isCorrectAnswer: Bool)
+
+    func showLoadingIndicator()
+    func hideLoadingIndicator()
+
+    func showNetworkError(message: String)
 }
 
 
