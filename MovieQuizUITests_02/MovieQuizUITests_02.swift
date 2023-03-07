@@ -58,35 +58,34 @@ final class MovieQuizUITests: XCTestCase {
         XCTAssertEqual(indexLabel.label, "2/10")
     }
 
-     func testGameFinish() {
-         sleep(2)
-         for _ in 1...10 {
-             app.buttons["No"].tap()
-             sleep(2)
-         }
+    func testGameFinish() {
+        sleep(2)
+        for _ in 1...10 {
+            app.buttons["No"].tap()
+            sleep(2)
+        }
 
-         let alert = app.alerts["Game results"]
+        let alert = app.alerts["Game results"]
+        XCTAssertTrue(alert.exists)
+        XCTAssertTrue(alert.label == "Этот раунд окончен!")
+        XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")
+    }
 
-         XCTAssertTrue(alert.exists)
-         XCTAssertTrue(alert.label == "Этот раунд окончен!")
-         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")
-     }
+    func testAlertDismiss() {
+        sleep(2)
+        for _ in 1...10 {
+            app.buttons["No"].tap()
+            sleep(2)
+        }
 
-     func testAlertDismiss() {
-         sleep(2)
-         for _ in 1...10 {
-             app.buttons["No"].tap()
-             sleep(2)
-         }
+        let alert = app.alerts["Game results"]
+        alert.buttons.firstMatch.tap()
 
-         let alert = app.alerts["Game results"]
-         alert.buttons.firstMatch.tap()
+        sleep(2)
 
-         sleep(2)
+        let indexLabel = app.staticTexts["Index"]
 
-         let indexLabel = app.staticTexts["Index"]
-
-         XCTAssertFalse(alert.exists)
-         XCTAssertTrue(indexLabel.label == "1/10")
-     }
+        XCTAssertFalse(alert.exists)
+        XCTAssertTrue(indexLabel.label == "1/10")
+    }
 }
