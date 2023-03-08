@@ -10,6 +10,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
     private var presenter: MovieQuizPresenter!
+    private var alertPresenter: AlertPresenter?
 
     // MARK: - Lifecycle
 
@@ -48,7 +49,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     func show(quiz result: QuizResultsViewModel) {
         let message = presenter.makeResultsMessage()
 
-        let alert = UIAlertController(
+        let alertPresenter = UIAlertController(
             title: result.title,
             message: message,
             preferredStyle: .alert)
@@ -59,9 +60,11 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             self.presenter.restartGame()
         }
 
-        alert.addAction(action)
+        alertPresenter.addAction(action)
 
-        self.present(alert, animated: true, completion: nil)
+        self.present(alertPresenter, animated: true, completion: nil)
+        alertPresenter.view.accessibilityIdentifier = "Game results"
+
     }
 
     func highlightImageBorder(isCorrectAnswer: Bool) {
